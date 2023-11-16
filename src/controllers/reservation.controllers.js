@@ -258,9 +258,12 @@ const createReservation = async (req, res) => {
       schedule,
       tableTypeId,
       countGuest,
-      refundFee
+      refundFee,
     } = req.body;
-    console.log("🚀 ~ file: reservation.controllers.js:262 ~ createReservation ~ req.body:", req.body)
+    console.log(
+      "🚀 ~ file: reservation.controllers.js:262 ~ createReservation ~ req.body:",
+      req.body
+    );
     let now = new Date(Date.now());
     const account = req.account;
     const user = await User.findOne({
@@ -279,11 +282,14 @@ const createReservation = async (req, res) => {
           note: note,
           status: -2,
           createAt: now,
-          refundFee
+          refundFee,
         },
         { transaction: transaction }
       );
-      console.log("🚀 ~ file: reservation.controllers.js:285 ~ createReservation ~ reservation:", reservation)
+      console.log(
+        "🚀 ~ file: reservation.controllers.js:285 ~ createReservation ~ reservation:",
+        reservation
+      );
       //check available & fill table
       let { isSuccess, msgFillTable, preFeeTable } =
         await makeTableOfReservation(
@@ -308,7 +314,10 @@ const createReservation = async (req, res) => {
         drinkQuantities,
         transaction
       );
-      console.log("🚀 ~ file: reservation.controllers.js:304 ~ createReservation ~ isSuccess2:", isSuccess2)
+      console.log(
+        "🚀 ~ file: reservation.controllers.js:304 ~ createReservation ~ isSuccess2:",
+        isSuccess2
+      );
 
       if (!isSuccess2) {
         msgReservation = msgMakeMenu;
@@ -344,7 +353,10 @@ const createReservation = async (req, res) => {
       await reservation.save({ transaction: transaction });
       await transaction.commit();
     } catch (error) {
-      console.log("🚀 ~ file: reservation.controllers.js:340 ~ createReservation ~ error:", error.message)
+      console.log(
+        "🚀 ~ file: reservation.controllers.js:340 ~ createReservation ~ error:",
+        error.message
+      );
       await transaction.rollback();
       return res.status(500).json({
         isSuccess: false,
@@ -370,20 +382,21 @@ const createReservation = async (req, res) => {
 
 const cancelReservation = async (req, res) => {
   try {
-    const { reservation_id } = req.body
-    const user = req.user
-    const result = await reservationService.cancelReservation(reservation_id, user)
-    return res.json(
-      result
-    )
+    const { reservation_id } = req.body;
+    const user = req.user;
+    const result = await reservationService.cancelReservation(
+      reservation_id,
+      user
+    );
+    return res.json(result);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(500).json({
       isSuccess: false,
       message: error.message,
-    })
+    });
   }
-}
+};
 
 const getAllReservationFilterByUser = async (req, res) => {
   try {
@@ -532,6 +545,8 @@ const getDetailReservation = async (req, res) => {
     delete reservation.dataValues.User;
     reservation.dataValues.preFeeStr =
       reservation.dataValues.preFee.toLocaleString();
+    reservation.dataValues.refundFeeStr =
+      reservation.dataValues.refundFee.toLocaleString();
     let menuReservation = await Menu_Reservation.findAll({
       where: {
         reservationId: reservation.reservationId,
@@ -602,25 +617,32 @@ const getDetailReservation = async (req, res) => {
 };
 
 const ChangeSchedule = async (req, res) => {
-  const user = req.user
-  const { reservationId } = req.params
-  const { newSchedule } = req.body
+  const user = req.user;
+  const { reservationId } = req.params;
+  const { newSchedule } = req.body;
   try {
-    const result = await reservationService.changeSchedule(reservationId, newSchedule, user)
-    return res.json(result)
+    const result = await reservationService.changeSchedule(
+      reservationId,
+      newSchedule,
+      user
+    );
+    return res.json(result);
   } catch (error) {
-    console.log("🚀 ~ file: reservation.controllers.js:612 ~ ChangeSchedule ~ error:", error)
+    console.log(
+      "🚀 ~ file: reservation.controllers.js:612 ~ ChangeSchedule ~ error:",
+      error
+    );
     return res.json({
       isSuccess: false,
       message: error.message,
-    })
+    });
   }
-}
+};
 
 module.exports = {
   createReservation,
   getAllReservationFilterByUser,
   getDetailReservation,
   cancelReservation,
-  ChangeSchedule
+  ChangeSchedule,
 };
