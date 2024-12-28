@@ -1,8 +1,9 @@
 const express = require('express');
-const { Dish, Service } = require('../models');
+const { Dish, Service, DishType } = require('../models');
 const {
 	checkCreateDish,
 	checkCreateService,
+	checkCreateTypeDish,
 } = require('../middlewares/validation/checkCreate');
 const { authenticate } = require('../middlewares/auth/authenticate.js');
 const { authorize } = require('../middlewares/auth/authorize.js');
@@ -29,6 +30,7 @@ managerRouter.post(
 	'/type-dish/create',
 	authenticate,
 	authorize(['manager']),
+	checkCreateTypeDish(DishType),
 	createTypeDish,
 );
 
