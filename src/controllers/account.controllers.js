@@ -37,7 +37,7 @@ const createClientWithTransaction = async (
       },
       { transaction: t }
     );
-    const newClient = await User.create(
+      await User.create(
       {
         accountId: newAccount.accountId,
         userName: userName,
@@ -48,24 +48,24 @@ const createClientWithTransaction = async (
       { transaction: t }
     );
     const randomID = Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
-    let transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false, // true for port 465, false for other ports
-      auth: {
-        user: "n19dccn038@student.ptithcm.edu.vn", // generated ethereal user
-        pass: "fxysqktsjuembqvu", // generated ethereal password
-      },
-    });
+    // let transporter = nodemailer.createTransport({
+    //   host: "smtp.gmail.com",
+    //   port: 587,
+    //   secure: false, // true for port 465, false for other ports
+    //   auth: {
+    //     user: "n19dccn038@student.ptithcm.edu.vn", // generated ethereal user
+    //     pass: "fxysqktsjuembqvu", // generated ethereal password
+    //   },
+    // });
     // send mail with defined transport object
-    await transporter.sendMail({
-      from: '"Firestaurant 👻"<n19dccn038@student.ptithcm.edu.vn>', // sender address
-      // from: "n19dccn107@student.ptithcm.edu.vn", // sender address
-      to: `${email}`, // list of receivers
-      subject: "VERIFY OTP", // Subject line
-      text: "VERIFY OTP", // plain text body
-      html: `Mã xác nhận của bạn là: ${randomID}`, // html body
-    });
+    // await transporter.sendMail({
+    //   from: '"Firestaurant 👻"<n19dccn038@student.ptithcm.edu.vn>', // sender address
+    //   // from: "n19dccn107@student.ptithcm.edu.vn", // sender address
+    //   to: `${email}`, // list of receivers
+    //   subject: "VERIFY OTP", // Subject line
+    //   text: "VERIFY OTP", // plain text body
+    //   html: `Mã xác nhận của bạn là: ${randomID}`, // html body
+    // });
     newAccount.otp = randomID;
     await newAccount.save({ transaction: t });
     await t.commit(); // Lưu thay đổi và kết thúc transaction
