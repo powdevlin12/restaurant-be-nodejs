@@ -15,6 +15,7 @@ const {
 	updateService,
 	getAllReservationFilterByManager,
 	updateStatusOfReservation,
+	deleteTypeDish,
 } = require('../controllers/manager.controllers');
 const managerRouter = express.Router();
 
@@ -32,6 +33,13 @@ managerRouter.post(
 	authorize(['manager']),
 	checkCreateTypeDish(DishType),
 	createTypeDish,
+);
+
+managerRouter.post(
+	'/type-dish/delete',
+	authenticate,
+	authorize(['manager']),
+	deleteTypeDish,
 );
 
 managerRouter.put(

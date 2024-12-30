@@ -55,6 +55,29 @@ const createTypeDish = async (req, res) => {
 	}
 };
 
+const deleteTypeDish = async (req, res) => {
+	const { typeDishId } = req.body;
+	try {
+		console.dir(req.body);
+
+		await DishType.destroy({
+			where: {
+				dishTypeId: typeDishId,
+			},
+		});
+		return res.status(200).json({
+			isSuccess: true,
+			msg: 'Xóa phân loại thành công',
+		});
+	} catch (error) {
+		console.dir(error);
+		return res.status(500).json({
+			isSuccess: false,
+			msg: 'Xóa phân loại thất bại',
+		});
+	}
+};
+
 const updateDish = async (req, res) => {
 	try {
 		const { dishId } = req.params;
@@ -215,4 +238,5 @@ module.exports = {
 	getAllReservationFilterByManager,
 	updateStatusOfReservation,
 	createTypeDish,
+	deleteTypeDish,
 };
